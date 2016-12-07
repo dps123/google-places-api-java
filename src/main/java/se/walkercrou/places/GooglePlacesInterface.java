@@ -298,6 +298,11 @@ public interface GooglePlacesInterface extends Types, Statuses {
     String STRING_AUTHOR_URL = "author_url";
 
     /**
+     * Url of author
+     */
+    String STRING_PROFILE_PHOTO_URL = "profile_photo_url";
+
+    /**
      * Language for review localization
      */
     String STRING_LANGUAGE = "language";

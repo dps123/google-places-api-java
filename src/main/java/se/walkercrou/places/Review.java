@@ -9,8 +9,9 @@ import java.util.List;
  * Represents a user submitted review.
  */
 public class Review {
+
     private final List<Aspect> aspects = new ArrayList<>();
-    private String author, authorUrl, lang, text;
+    private String author, authorUrl, profilePhotoUrl, lang, text;
     private int rating;
     private long time;
 
@@ -180,9 +181,26 @@ public class Review {
     }
 
     /**
+     * @return the profilePhotoUrl
+     */
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    }
+
+    /**
+     * @param profilePhotoUrl the profilePhotoUrl to set
+     * @return this
+     */
+    public Review setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
+        return this;
+    }
+
+    /**
      * Represents an certain aspect of a review such as "quality" or "service".
      */
     public static class Aspect {
+
         private final int rating;
         private final String type;
 
@@ -190,7 +208,7 @@ public class Review {
          * Creates a new Aspect with the specified rating an aspect type.
          *
          * @param rating of aspect
-         * @param type   of aspect
+         * @param type of aspect
          */
         protected Aspect(int rating, String type) {
             this.rating = rating;

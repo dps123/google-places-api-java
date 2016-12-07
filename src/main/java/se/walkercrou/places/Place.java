@@ -18,6 +18,7 @@ import static se.walkercrou.places.GooglePlaces.*;
  * Represents a place returned by Google Places API_
  */
 public class Place {
+
     private final List<String> types = new ArrayList<>();
     private final List<Photo> photos = new ArrayList<>();
     private final List<Review> reviews = new ArrayList<>();
@@ -49,7 +50,7 @@ public class Place {
     /**
      * Parses a detailed Place object.
      *
-     * @param client  api client
+     * @param client api client
      * @param rawJson json to parse
      * @return a detailed place
      */
@@ -75,8 +76,9 @@ public class Place {
 
         // grab the price rank
         Price price = Price.NONE;
-        if (result.has(INTEGER_PRICE_LEVEL))
+        if (result.has(INTEGER_PRICE_LEVEL)) {
             price = Price.values()[result.getInt(INTEGER_PRICE_LEVEL)];
+        }
 
         // location
         JSONObject location = result.getJSONObject(OBJECT_GEOMETRY).getJSONObject(OBJECT_LOCATION);
@@ -134,7 +136,6 @@ public class Place {
             }
         }
 
-
         // address components
         JSONArray addrComponents = result.optJSONArray(ARRAY_ADDRESS_COMPONENTS);
         List<AddressComponent> addressComponents = new ArrayList<>();
@@ -183,6 +184,10 @@ public class Place {
                 int reviewRating = jsonReview.optInt(INTEGER_RATING, -1);
                 String text = jsonReview.optString(STRING_TEXT, null);
                 long time = jsonReview.optLong(LONG_TIME, -1);
+                String profilePhotoUrl = jsonReview.optString(STRING_PROFILE_PHOTO_URL, null);
+                if (profilePhotoUrl != null) {
+                    profilePhotoUrl = "https:" + profilePhotoUrl;
+                }
 
                 // aspects of the review
                 JSONArray jsonAspects = jsonReview.optJSONArray(ARRAY_ASPECTS);
@@ -196,7 +201,9 @@ public class Place {
                     }
                 }
 
-                reviews.add(new Review().addAspects(aspects).setAuthor(author).setAuthorUrl(authorUrl).setLanguage(lang)
+                reviews.add(new Review().addAspects(aspects)
+                        .setAuthor(author).setAuthorUrl(authorUrl).setProfilePhotoUrl(profilePhotoUrl)
+                        .setLanguage(lang)
                         .setRating(reviewRating).setText(text).setTime(time));
             }
         }
@@ -234,7 +241,8 @@ public class Place {
     }
 
     /**
-     * Sets the {@link se.walkercrou.places.GooglePlaces} client associated with this Place object.
+     * Sets the {@link se.walkercrou.places.GooglePlaces} client associated with
+     * this Place object.
      *
      * @param client to set
      * @return this
@@ -434,7 +442,8 @@ public class Place {
     }
 
     /**
-     * Returns the "vicinity" the place is in. This is sometimes a substitute for address.
+     * Returns the "vicinity" the place is in. This is sometimes a substitute
+     * for address.
      *
      * @return vicinity
      */
@@ -443,7 +452,8 @@ public class Place {
     }
 
     /**
-     * Sets the "vicinity" the place is in. This is sometimes a substitute for address.
+     * Sets the "vicinity" the place is in. This is sometimes a substitute for
+     * address.
      *
      * @param vicinity of place
      * @return this
@@ -484,7 +494,8 @@ public class Place {
     }
 
     /**
-     * Returns the input stream of this place. {@link #downloadIcon()} must be called previous to call this.
+     * Returns the input stream of this place. {@link #downloadIcon()} must be
+     * called previous to call this.
      *
      * @return input stream
      */
@@ -493,7 +504,8 @@ public class Place {
     }
 
     /**
-     * Returns the icon image. {@link #downloadIcon()} must be called previous to this.
+     * Returns the icon image. {@link #downloadIcon()} must be called previous
+     * to this.
      *
      * @return image
      */
@@ -706,8 +718,9 @@ public class Place {
     }
 
     /**
-     * Returns the JSON representation of this place. This does not build a JSON object, it only returns the JSON
-     * that was given in the initial response from the server.
+     * Returns the JSON representation of this place. This does not build a JSON
+     * object, it only returns the JSON that was given in the initial response
+     * from the server.
      *
      * @return the json representation
      */
@@ -789,7 +802,8 @@ public class Place {
     }
 
     /**
-     * Returns an updated Place object with more details than the Place object returned in an initial query.
+     * Returns an updated Place object with more details than the Place object
+     * returned in an initial query.
      *
      * @param params extra params to include in the request url
      * @return a new place with more details
